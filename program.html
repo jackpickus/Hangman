@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>HangMan</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <h1>Welcome to HangMan!</h1>
+
+    Input: <input id="guess" type="text">
+    <button onclick="check()">Guess</button>
+
+    <h2><u>Failed Guesses:</u></h2>
+    <p id="wrong"></p>
+    <h4>Strikes: </h4>
+    <div id="strike-count"></div>
+    <p>After 7 strikes you lose!</p>
+
+    <h3>The Word:</h3>
+    <div id="div1"></div>
+    <script src="program.js"></script>
+  </body>
+</html>
