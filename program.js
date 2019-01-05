@@ -17,7 +17,7 @@ var words = [
 ];
 
 function selectWord() {
-  var num = Math.floor(Math.random() * 15) + 1 
+  var num = Math.floor(Math.random() * 15) + 1;
   return words[num];
 }
 
@@ -44,6 +44,16 @@ var counter = 0; // counter increased once after each guess
 var newWord = [word.length];
 var wrongGuesses = "";
 
+// Check to see if the word has been completed
+function gameOver() {
+  for (i = 0; i < newWord.length; i++) {
+    if (newWord[i] != word[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 // will loop through word to see if guessed letter is present
 function check() {
   var letter = document.getElementById("guess").value;
@@ -55,7 +65,7 @@ function check() {
     } else if (newWord[i] == null) {
       newWord[i] = "_";
     } else {
-      continue;
+      continue; // means the correct letter has already been guessed
     }
   }
 
@@ -86,4 +96,14 @@ function check() {
   // reset boolean to detect next wrong guess and increase strike count
   isPresent = false;
   isWrong = false;
+
+  if (gameOver()) {
+    document.getElementById("gg").innerHTML = "You Won!";
+    document.getElementById("playBtn").disabled = true;
+  }
+  if (strikes >= 7) {
+    document.getElementById("gg").innerHTML = "You Lose!";
+    document.getElementById("playBtn").disabled = true;
+  }
+
 }
