@@ -86,7 +86,6 @@ function check() {
     newContent = document.createTextNode(newWord);
     counter++;
   }
-  //var newContent = document.createTextNode(newWord); // IF FIRST GUESS IS WRONG, WILL PRINT OUT LENTGTH!
   newDiv.appendChild(newContent); // add the text to the new div
 
   // add the newly created element and its content into the DOM
