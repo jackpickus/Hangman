@@ -54,6 +54,14 @@ function gameOver() {
   return true;
 }
 
+function playAgain() {
+  if (confirm('Would you like to play again?')) {
+    location.reload();
+  } else {
+    // Do nothing!
+  }
+}
+
 // will loop through word to see if guessed letter is present
 function check() {
   var letter = document.getElementById("guess").value;
@@ -67,6 +75,10 @@ function check() {
     } else {
       continue; // means the correct letter has already been guessed
     }
+  }
+
+  if (newWord[0] == newWord.length) {
+    newWord[0] = "_";
   }
 
   if (!isPresent) { // means letter guessed was never present in word
@@ -99,10 +111,12 @@ function check() {
   if (gameOver()) {
     document.getElementById("gg").innerHTML = "You Won!";
     document.getElementById("playBtn").disabled = true;
+    playAgain();
   }
   if (strikes >= 7) {
     document.getElementById("gg").innerHTML = "You Lose!";
     document.getElementById("playBtn").disabled = true;
+    playAgain();
   }
 
 }
