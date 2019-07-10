@@ -65,6 +65,7 @@ function playAgain() {
 // will loop through word to see if guessed letter is present
 function check() {
   var letter = document.getElementById("guess").value;
+	document.getElementById("guess").value='';
   var newDiv = document.createElement("div");
   for (i = 0; i < word.length; i++) {
     if (word[i] == letter) {
