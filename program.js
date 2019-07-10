@@ -1,4 +1,4 @@
-var words = [
+const words = [
   "apple",
   "pineapple",
   "cappuccino",
@@ -17,12 +17,12 @@ var words = [
 ];
 
 function selectWord() {
-  var num = Math.floor(Math.random() * 15) + 1;
+  let num = Math.floor(Math.random() * 15) + 1;
   return words[num];
 }
 
-var word = selectWord();
-var wordSpaces = "";
+let word = selectWord();
+let wordSpaces = "";
 
 function printSpaces(answer) {
   for(i = 0; i < answer.length; i++) {
@@ -37,12 +37,11 @@ function printSpaces(answer) {
 
 printSpaces(word);
 
-var strikes = 0;
-var isPresent = false;
-var isWrong = false; // boolean marked true after first wrong guess
-var counter = 0; // counter increased once after each guess
-var newWord = [word.length];
-var wrongGuesses = "";
+let strikes = 0;
+let isWrong = false; // boolean marked true after first wrong guess
+let counter = 0; // counter increased once after each guess
+let newWord = [word.length];
+let wrongGuesses = "";
 
 // Check to see if the word has been completed
 function gameOver() {
@@ -64,16 +63,24 @@ function playAgain() {
 
 // will loop through word to see if guessed letter is present
 function check() {
-  var letter = document.getElementById("guess").value;
-	document.getElementById("guess").value='';
-  var newDiv = document.createElement("div");
+  let letter = document.getElementById("guess").value;
+	document.getElementById("guess").value=''; // reset text field so empty for next guess
+  let newDiv = document.createElement("div");
+
+	if (newWord.indexOf(letter) >= 0 || wrongGuesses.indexOf(letter) >= 0) { // letter has already been guessed
+		alert("You already guessed this letter");
+		return;
+	}
+
   for (i = 0; i < word.length; i++) {
-    if (word[i] == letter) {
+		if (word[i] == letter && newWord[i] != letter) { // true if very first time letter correctly guessed
       newWord[i] = letter;
-      isPresent = true;
-    } else if (newWord[i] == null) {
-      newWord[i] = "_";
+			console.log("If statement: " + letter);
+		} else if (newWord[i] == null) { // This statement is only reached and it's on first guess to construct string
+			newWord[i] = "_";              // to output the underscores and correctly guessed letters
+			console.log("Else if statement: " + letter);
     } else {
+			console.log('Else statement of loop reached on letter: ' + letter);
       continue; // means the correct letter has already been guessed
     }
   }
@@ -82,16 +89,16 @@ function check() {
     newWord[0] = "_";
   }
 
-  if (!isPresent) { // means letter guessed was never present in word
+	if (word.indexOf(letter) < 0 && wrongGuesses.indexOf(letter) < 0) {
     strikes++;
     isWrong = true;
     wrongGuesses += letter + " ";
-  }
+	}
+
   document.getElementById("strike-count").innerHTML = strikes;
   document.getElementById("wrong").innerHTML = wrongGuesses;
 
-
-  var newContent;
+  let newContent;
   // give div the updated word
   if (counter <= 0 && isWrong) {
     newContent = document.createTextNode(wordSpaces);
@@ -102,11 +109,10 @@ function check() {
   newDiv.appendChild(newContent); // add the text to the new div
 
   // add the newly created element and its content into the DOM
-  var currentDiv = document.getElementById("div1");
+  let currentDiv = document.getElementById("div1");
   document.body.insertBefore(newDiv, currentDiv);
 
   // reset boolean to detect next wrong guess and increase strike count
-  isPresent = false;
   isWrong = false;
 
   if (gameOver()) {
