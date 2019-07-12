@@ -61,6 +61,14 @@ function playAgain() {
   }
 }
 
+$('#guess').keypress(function (e) {
+  let key = e.which;
+  if(key == 13)  // the enter key code
+   {
+     check(); 
+   }
+ }); 
+
 // will loop through word to see if guessed letter is present
 function check() {
   let letter = document.getElementById("guess").value;
