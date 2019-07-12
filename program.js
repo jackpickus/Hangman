@@ -17,7 +17,7 @@ const words = [
 ];
 
 function selectWord() {
-  let num = Math.floor(Math.random() * 15) + 1;
+  let num = Math.floor(Math.random() * words.length) + 1;
   return words[num];
 }
 
@@ -32,7 +32,9 @@ function printSpaces(answer) {
       wordSpaces += "_ ";
     }
   }
-  document.write(wordSpaces);
+  let spaces = document.createTextNode(wordSpaces);
+  let init = document.getElementById("init");
+  init.appendChild(spaces);
 }
 
 printSpaces(word);
@@ -42,6 +44,7 @@ let isWrong = false; // boolean marked true after first wrong guess
 let counter = 0; // counter increased once after each guess
 let newWord = [word.length];
 let wrongGuesses = "";
+let firstTime = true;
 
 // Check to see if the word has been completed
 function gameOver() {
@@ -61,19 +64,18 @@ function playAgain() {
   }
 }
 
-$('#guess').keypress(function (e) {
-  let key = e.which;
-  if(key == 13)  // the enter key code
-   {
-     check(); 
-   }
- }); 
-
 // will loop through word to see if guessed letter is present
 function check() {
+  // remove initial spaces after first guess
+  // so new text can be added to DOM
+  if (firstTime) {
+    let spaces = document.getElementById("init");
+    spaces.parentNode.removeChild(spaces);
+    firstTime = false;
+  }
+
   let letter = document.getElementById("guess").value;
 	document.getElementById("guess").value=''; // reset text field so empty for next guess
-  let newDiv = document.createElement("div");
 
 	if (newWord.indexOf(letter) >= 0 || wrongGuesses.indexOf(letter) >= 0) { // letter has already been guessed
 		alert("You already guessed this letter");
@@ -83,12 +85,9 @@ function check() {
   for (i = 0; i < word.length; i++) {
 		if (word[i] == letter && newWord[i] != letter) { // true if very first time letter correctly guessed
       newWord[i] = letter;
-			console.log("If statement: " + letter);
 		} else if (newWord[i] == null) { // This statement is only reached and it's on first guess to construct string
 			newWord[i] = "_";              // to output the underscores and correctly guessed letters
-			console.log("Else if statement: " + letter);
     } else {
-			console.log('Else statement of loop reached on letter: ' + letter);
       continue; // means the correct letter has already been guessed
     }
   }
@@ -106,32 +105,36 @@ function check() {
   document.getElementById("strike-count").innerHTML = strikes;
   document.getElementById("wrong").innerHTML = wrongGuesses;
 
-  let newContent;
-  // give div the updated word
-  if (counter <= 0 && isWrong) {
-    newContent = document.createTextNode(wordSpaces);
-  } else {
-    newContent = document.createTextNode(newWord);
-    counter++;
-  }
-  newDiv.appendChild(newContent); // add the text to the new div
-
-  // add the newly created element and its content into the DOM
-  let currentDiv = document.getElementById("div1");
-  document.body.insertBefore(newDiv, currentDiv);
-
-  // reset boolean to detect next wrong guess and increase strike count
-  isWrong = false;
-
   if (gameOver()) {
     document.getElementById("gg").innerHTML = "You Won!";
     document.getElementById("playBtn").disabled = true;
-    playAgain();
+    setTimeout(function() {
+      playAgain();
+    }, 1000);
   }
   if (strikes >= 7) {
     document.getElementById("gg").innerHTML = "You Lose!";
     document.getElementById("playBtn").disabled = true;
-    playAgain();
+    setTimeout(function() {
+      playAgain();
+    }, 1000);
   }
 
 }
+
+$(document).ready(function(){
+  $("#playBtn").click(function(){
+    check();
+    $("#div1").text(newWord.join(" "));
+  });
+
+  // checks letter when "enter" button is pressed
+  $('#guess').keypress(function (e) {
+    let key = e.which;
+    if(key == 13)  // the enter key code
+     {
+      check(); 
+      $("#div1").text(newWord.join(" "));
+    }
+  }); 
+});
